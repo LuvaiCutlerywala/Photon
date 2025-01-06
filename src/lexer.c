@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 //Helper Methods
 
@@ -48,24 +49,51 @@ TOKEN* next_token(LEXER* lexer) {
     }
 
     if (lexer->current_char == '"') {
-      info("lexer.next_token", "Parsing strings.");
+      debug("lexer.next_token", "Parsing strings.");
       return init_token(TOKEN_STRING_LITERAL, collect_string(lexer));
     }
 
+    if (isdigit(lexer->current_char)) {
+      debug("lexer.next_token", "Parsing number.");
+      return tokenize_number(lexer);
+    }
+
     if (isalnum(lexer->current_char)) {
-      info("lexer.next_token", "Parsing identifiers.");
+      debug("lexer.next_token", "Parsing identifiers.");
       return init_token(TOKEN_IDENTIFIER, collect_identifier(lexer));
     }
 
     switch (lexer->current_char) {
       case '(':
+        debug("lexer.next_token", "Parsing left parenthesis.");
         return tokenize(lexer, TOKEN_LEFT_PARENTHESIS);
       case ')':
+        debug("lexer.next_token", "Parsing right parenthesis.");
         return tokenize(lexer, TOKEN_RIGHT_PARENTHESIS);
       case ';':
+        debug("lexer.next_token", "Parsing semicolon.");
         return tokenize(lexer, TOKEN_SEMICOLON);
       case '=':
+        debug("lexer.next_token", "Parsing equals sign.");
         return tokenize(lexer, TOKEN_ASSIGN);
+      case '+':
+        debug("lexer.next_token", "Parsing plus.");
+        return tokenize(lexer, TOKEN_PLUS);
+      case '-':
+        debug("lexer.next_token", "Parsing minus.");
+      return tokenize(lexer, TOKEN_MINUS);
+      case '*':
+        debug("lexer.next_token", "Parsing star.");
+      return tokenize(lexer, TOKEN_STAR);
+      case '/':
+        debug("lexer.next_token", "Parsing slash.");
+      return tokenize(lexer, TOKEN_SLASH);
+      case '{':
+        debug("lexer.next_token", "Parsing brackets.");
+        return tokenize(lexer, TOKEN_LEFT_BRACE);
+      case '}':
+        debug("lexer.next_token", "Parsing brackets.");
+        return tokenize(lexer, TOKEN_RIGHT_BRACE);
       default:
         error("lexer.next_token", "Invalid character");
     }
@@ -80,6 +108,39 @@ TOKEN* tokenize(LEXER* lexer, const TOKEN_TYPE type) {
   return token;
 }
 
+TOKEN* tokenize_number(LEXER* lexer) {
+  bool isReal = false;
+  char* number = calloc(1, sizeof(char));
+  number[0] = '\0';
+  while (isdigit(lexer->current_char) || lexer->current_char == '.') {
+    if (lexer->current_char == '.') {
+      isReal = true;
+      char* new_str = wrap_char_to_str(lexer->current_char);
+      number = realloc(number, (strlen(number) + strlen(new_str) + 1) * sizeof(char));
+      strcat(number, new_str);
+      free(new_str);
+      advance(lexer);
+    }
+  }
+
+  advance(lexer);
+
+  if (number == NULL) {
+    error("lexer.tokenize_number", "Failed to parse number.");
+    exit(1);
+  }
+
+  TOKEN* token;
+  if (isReal) {
+    token = init_token(TOKEN_REAL_LITERAL, number);
+  } else {
+    token = init_token(TOKEN_INTEGER_LITERAL, number);
+  }
+  free(number);
+
+  return token;
+}
+
 //Collection methods
 
 char* collect_string(LEXER* lexer) {
@@ -91,6 +152,7 @@ char* collect_string(LEXER* lexer) {
     string = realloc(string, (strlen(string) + strlen(new_str) + 1) * sizeof(char));
     strcat(string, new_str);
     free(new_str);
+    advance(lexer);
   }
 
   advance(lexer);
@@ -111,6 +173,7 @@ char* collect_identifier(LEXER* lexer) {
     id = realloc(id, (strlen(id) + strlen(new_str) + 1) * sizeof(char));
     strcat(id, new_str);
     free(new_str);
+    advance(lexer);
   }
 
   advance(lexer);
@@ -121,9 +184,4 @@ char* collect_identifier(LEXER* lexer) {
   }
 
   return id;
-}
-
-double collect_number(LEXER* lexer) {
-  //TODO: Write a number collection method.
-  return 0;
 }

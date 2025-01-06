@@ -17,10 +17,10 @@ void skip_whitespace_newline(LEXER* lexer);
 //Tokenization method.
 TOKEN* next_token(LEXER* lexer);
 TOKEN* tokenize(LEXER* lexer, TOKEN_TYPE type);
+TOKEN* tokenize_number(LEXER* lexer);
 
 //Collection methods.
 char* collect_string(LEXER* lexer);
 char* collect_identifier(LEXER* lexer);
-double collect_number(LEXER* lexer);
 
 #endif

@@ -8,9 +8,9 @@ int main(int argc, char** argv) {
     LEXER* lexer = init_lexer("string name = \"john doe\";"
 "print(name)");
     info("main.main", "Initialised lexer.");
-    TOKEN* token = next_token(lexer);
+    const TOKEN* token = next_token(lexer);
     while (token != NULL) {
-        printf("TOKEN: (%d, %s)", token->type, token->value);
+        printf("TOKEN: (%d, %s)\n", token->type, token->value);
         token = next_token(lexer);
     }
     info("main.main", "Finished parsing file.");
