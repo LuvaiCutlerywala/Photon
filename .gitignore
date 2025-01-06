@@ -1,0 +1,5 @@
+./buildDir
+buildDir/*
+
+./.idea
+.idea/*
