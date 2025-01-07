@@ -9,23 +9,6 @@ typedef struct lexer {
   char* content;
 } LEXER;
 
-const static char* KEYWORDS[14] = {
-  "string",
-  "int",
-  "real",
-  "boolean",
-  "byte",
-  "if",
-  "while",
-  "for",
-  "break",
-  "continue",
-  "else",
-  "return",
-  "true",
-  "false"
-};
-
 //Lexer state modifiers.
 LEXER* init_lexer(char* content);
 void advance(LEXER* lexer);
@@ -38,8 +21,6 @@ TOKEN* tokenize(LEXER* lexer, TOKEN_TYPE type);
 TOKEN* tokenize_number(LEXER* lexer);
 TOKEN* tokenize_identifier(LEXER* lexer);
 TOKEN* tokenize_string(LEXER* lexer);
-
-//Collection methods.
-char* collect_string(LEXER* lexer);
+TOKEN* tokenize_string(LEXER* lexer);
 
 #endif

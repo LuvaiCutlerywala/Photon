@@ -59,14 +59,13 @@ void strip_comments(LEXER* lexer) {
 // Tokenization method
 
 TOKEN* next_token(LEXER* lexer) {
-  //TODO: Complete tokenization method.
   while (lexer->current_char != '\0' || lexer->current_index < strlen(lexer->content)) {
     if (lexer->current_char == '\n' || lexer->current_char == ' ') {
       skip_whitespace_newline(lexer);
     }
 
     if (lexer->current_char == '"') {
-      return init_token(TOKEN_STRING_LITERAL, collect_string(lexer));
+      return tokenize_string(lexer);
     }
 
     if (isdigit(lexer->current_char)) {
@@ -161,9 +160,7 @@ TOKEN* tokenize_identifier(LEXER* lexer) {
   return (is_keyword(id)) ? init_token(TOKEN_KEYWORD, id) : init_token(TOKEN_IDENTIFIER, id);
 }
 
-//Collection methods
-
-char* collect_string(LEXER* lexer) {
+TOKEN* tokenize_string(LEXER* lexer) {
   advance(lexer);
   char* string = calloc(1, sizeof(char));
   string[0] = '\0';
@@ -182,5 +179,5 @@ char* collect_string(LEXER* lexer) {
     exit(1);
   }
 
-  return string;
+  return init_token(TOKEN_STRING_LITERAL, string);
 }
