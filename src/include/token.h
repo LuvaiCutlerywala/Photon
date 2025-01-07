@@ -2,6 +2,8 @@
 #define TOKEN_H
 
 typedef enum token_type {
+  //Identifiers
+  TOKEN_KEYWORD,
   TOKEN_IDENTIFIER,
 
   //Type literals
