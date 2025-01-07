@@ -13,6 +13,5 @@ int main(int argc, char** argv) {
         printf("TOKEN: (%d, %s)\n", token->type, token->value);
         token = next_token(lexer);
     }
-    info("main.main", "Initialised lexer.");
     return 0;
 }
