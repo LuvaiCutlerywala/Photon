@@ -5,6 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 //Helper Methods
 
@@ -44,7 +45,7 @@ TOKEN* next_token(LEXER* lexer) {
   //TODO: Complete tokenization method.
   while (lexer->current_char != '\0' || lexer->current_index < strlen(lexer->content)) {
     if (lexer->current_char == '\n' || lexer->current_char == ' ') {
-      info("lexer.next_token", "Skipping spaces and newlines.");
+      debug("lexer.next_token", "Skipping spaces and newlines.");
       skip_whitespace_newline(lexer);
     }
 
@@ -109,18 +110,18 @@ TOKEN* tokenize(LEXER* lexer, const TOKEN_TYPE type) {
 }
 
 TOKEN* tokenize_number(LEXER* lexer) {
-  bool isReal = false;
   char* number = calloc(1, sizeof(char));
   number[0] = '\0';
+  bool is_real = false;
   while (isdigit(lexer->current_char) || lexer->current_char == '.') {
-    if (lexer->current_char == '.') {
-      isReal = true;
-      char* new_str = wrap_char_to_str(lexer->current_char);
-      number = realloc(number, (strlen(number) + strlen(new_str) + 1) * sizeof(char));
-      strcat(number, new_str);
-      free(new_str);
-      advance(lexer);
+    if (lexer->current_char == '.' && !is_real) {
+      is_real = true;
     }
+    char* new_str = wrap_char_to_str(lexer->current_char);
+    number = realloc(number, (strlen(number) + strlen(new_str) + 1) * sizeof(char));
+    strcat(number, new_str);
+    free(new_str);
+    advance(lexer);
   }
 
   advance(lexer);
@@ -130,13 +131,7 @@ TOKEN* tokenize_number(LEXER* lexer) {
     exit(1);
   }
 
-  TOKEN* token;
-  if (isReal) {
-    token = init_token(TOKEN_REAL_LITERAL, number);
-  } else {
-    token = init_token(TOKEN_INTEGER_LITERAL, number);
-  }
-  free(number);
+  TOKEN* token = (is_real) ? init_token(TOKEN_REAL_LITERAL, number) : init_token(TOKEN_INTEGER_LITERAL, number);
 
   return token;
 }
