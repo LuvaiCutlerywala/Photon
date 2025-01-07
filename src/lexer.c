@@ -15,6 +15,15 @@ char* wrap_char_to_str(const char c) {
   return string;
 }
 
+bool is_keyword(const char* word) {
+  for (int i = 0; i < sizeof(KEYWORDS)/sizeof(KEYWORDS[0]); i++) {
+    if (strcmp(word, KEYWORDS[i]) == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 //Lexer State Modifiers
 
 LEXER* init_lexer(char* content) {
@@ -38,6 +47,15 @@ void skip_whitespace_newline(LEXER* lexer) {
   }
 }
 
+void strip_comments(LEXER* lexer) {
+  //Skips the two front slashes required to make a comment.
+  advance(lexer);
+  advance(lexer);
+  while (lexer->current_char != '\n' && lexer->current_char != '\0') {
+    advance(lexer);
+  }
+}
+
 // Tokenization method
 
 TOKEN* next_token(LEXER* lexer) {
@@ -56,8 +74,13 @@ TOKEN* next_token(LEXER* lexer) {
     }
 
     if (isalnum(lexer->current_char)) {
-      return init_token(TOKEN_IDENTIFIER, collect_identifier(lexer));
+      return tokenize_identifier(lexer);
     }
+
+    if ((lexer->current_index + 1 < strlen(lexer->content))
+      && (lexer->current_char == '/' && lexer->content[lexer->current_index + 1] == '/')){
+        strip_comments(lexer);
+      }
 
     switch (lexer->current_char) {
       case '(':
@@ -116,9 +139,26 @@ TOKEN* tokenize_number(LEXER* lexer) {
     exit(1);
   }
 
-  TOKEN* token = (is_real) ? init_token(TOKEN_REAL_LITERAL, number) : init_token(TOKEN_INTEGER_LITERAL, number);
+  return (is_real) ? init_token(TOKEN_REAL_LITERAL, number) : init_token(TOKEN_INTEGER_LITERAL, number);
+}
 
-  return token;
+TOKEN* tokenize_identifier(LEXER* lexer) {
+  char* id = calloc(1, sizeof(char));
+  id[0] = '\0';
+  while (isalnum(lexer->current_char)) {
+    char* new_str = wrap_char_to_str(lexer->current_char);
+    id = realloc(id, (strlen(id) + strlen(new_str) + 1) * sizeof(char));
+    strcat(id, new_str);
+    free(new_str);
+    advance(lexer);
+  }
+
+  if (id == NULL) {
+    error("lexer.collect_identifier", "Failed to parse identifier.");
+    exit(1);
+  }
+
+  return (is_keyword(id)) ? init_token(TOKEN_KEYWORD, id) : init_token(TOKEN_IDENTIFIER, id);
 }
 
 //Collection methods
@@ -143,25 +183,4 @@ char* collect_string(LEXER* lexer) {
   }
 
   return string;
-}
-
-char* collect_identifier(LEXER* lexer) {
-  char* id = calloc(1, sizeof(char));
-  id[0] = '\0';
-  while (isalnum(lexer->current_char)) {
-    char* new_str = wrap_char_to_str(lexer->current_char);
-    id = realloc(id, (strlen(id) + strlen(new_str) + 1) * sizeof(char));
-    strcat(id, new_str);
-    free(new_str);
-    advance(lexer);
-  }
-
-  advance(lexer);
-
-  if (id == NULL) {
-    error("lexer.collect_identifier", "Failed to parse identifier.");
-    exit(1);
-  }
-
-  return id;
 }
