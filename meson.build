@@ -7,7 +7,9 @@ logger = shared_library('photon_logger', ['logging/logger.c', 'logging/logger.h'
 
 #Compile and install the actual compiler.
 include = include_directories('src/include')
-source = ['src/main.c', 'src/lexer.c', 'src/token.c', 'src/reader.c']
+source = ['src/main.c', 'src/lexer.c', 'src/token.c', 'src/reader.c', 'src/AST.c',
+        'src/parser.c'
+]
 
 photon = executable(
         'photon',
