@@ -1,14 +1,18 @@
 #include "include/lexer.h"
+#include "include/reader.h"
 
+#include <logging/logger.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <logging/logger.h>
 
 int main(int argc, char** argv) {
-    LEXER* lexer = init_lexer("3.141592654");
-    info("main.main", "Initialised lexer.");
+    char* contents = read_file("../examples/main.pht");
+    LEXER* lexer = init_lexer(contents);
     const TOKEN* token = next_token(lexer);
-    printf("%s\n", token->value);
-    info("main.main", "Finished parsing file.");
+    while (token != NULL) {
+        printf("TOKEN: (%d, %s)\n", token->type, token->value);
+        token = next_token(lexer);
+    }
+    info("main.main", "Initialised lexer.");
     return 0;
 }

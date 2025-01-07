@@ -5,7 +5,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include <stdio.h>
 
 //Helper Methods
 
@@ -45,55 +44,41 @@ TOKEN* next_token(LEXER* lexer) {
   //TODO: Complete tokenization method.
   while (lexer->current_char != '\0' || lexer->current_index < strlen(lexer->content)) {
     if (lexer->current_char == '\n' || lexer->current_char == ' ') {
-      debug("lexer.next_token", "Skipping spaces and newlines.");
       skip_whitespace_newline(lexer);
     }
 
     if (lexer->current_char == '"') {
-      debug("lexer.next_token", "Parsing strings.");
       return init_token(TOKEN_STRING_LITERAL, collect_string(lexer));
     }
 
     if (isdigit(lexer->current_char)) {
-      debug("lexer.next_token", "Parsing number.");
       return tokenize_number(lexer);
     }
 
     if (isalnum(lexer->current_char)) {
-      debug("lexer.next_token", "Parsing identifiers.");
       return init_token(TOKEN_IDENTIFIER, collect_identifier(lexer));
     }
 
     switch (lexer->current_char) {
       case '(':
-        debug("lexer.next_token", "Parsing left parenthesis.");
         return tokenize(lexer, TOKEN_LEFT_PARENTHESIS);
       case ')':
-        debug("lexer.next_token", "Parsing right parenthesis.");
         return tokenize(lexer, TOKEN_RIGHT_PARENTHESIS);
       case ';':
-        debug("lexer.next_token", "Parsing semicolon.");
         return tokenize(lexer, TOKEN_SEMICOLON);
       case '=':
-        debug("lexer.next_token", "Parsing equals sign.");
         return tokenize(lexer, TOKEN_ASSIGN);
       case '+':
-        debug("lexer.next_token", "Parsing plus.");
         return tokenize(lexer, TOKEN_PLUS);
       case '-':
-        debug("lexer.next_token", "Parsing minus.");
-      return tokenize(lexer, TOKEN_MINUS);
+        return tokenize(lexer, TOKEN_MINUS);
       case '*':
-        debug("lexer.next_token", "Parsing star.");
-      return tokenize(lexer, TOKEN_STAR);
+        return tokenize(lexer, TOKEN_STAR);
       case '/':
-        debug("lexer.next_token", "Parsing slash.");
-      return tokenize(lexer, TOKEN_SLASH);
+        return tokenize(lexer, TOKEN_SLASH);
       case '{':
-        debug("lexer.next_token", "Parsing brackets.");
         return tokenize(lexer, TOKEN_LEFT_BRACE);
       case '}':
-        debug("lexer.next_token", "Parsing brackets.");
         return tokenize(lexer, TOKEN_RIGHT_BRACE);
       default:
         error("lexer.next_token", "Invalid character");
