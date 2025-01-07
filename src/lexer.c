@@ -1,22 +1,22 @@
 #include "include/lexer.h"
+#include "include/macros.h"
 
 #include <logging/logger.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdbool.h>
 
 //Helper Methods
 
-char* wrap_char_to_str(const char c) {
+char* wrap_char_to_str(const char c){
   char* string = calloc(2, sizeof(char));
   string[0] = c;
   string[1] = '\0';
   return string;
 }
 
-bool is_keyword(const char* word) {
-  for (int i = 0; i < sizeof(KEYWORDS)/sizeof(KEYWORDS[0]); i++) {
+bool instance_of(const char* word, const char** list) {
+  for (int i = 0; i < size(list); i++) {
     if (strcmp(word, KEYWORDS[i]) == 0) {
       return true;
     }
@@ -157,7 +157,14 @@ TOKEN* tokenize_identifier(LEXER* lexer) {
     exit(1);
   }
 
-  return (is_keyword(id)) ? init_token(TOKEN_KEYWORD, id) : init_token(TOKEN_IDENTIFIER, id);
+  if (instance_of(id, KEYWORDS)) {
+    return init_token(TOKEN_KEYWORD, id);
+  }
+  if (instance_of(id, TYPES)) {
+    return init_token(TOKEN_VARIABLE_TYPE, id);
+  }
+
+  return init_token(TOKEN_IDENTIFIER, id);
 }
 
 TOKEN* tokenize_string(LEXER* lexer) {

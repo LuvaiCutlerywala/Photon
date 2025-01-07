@@ -3,6 +3,8 @@
 
 #include "token.h"
 
+#include <stdbool.h>
+
 typedef struct lexer {
   unsigned int current_index;
   char current_char;
@@ -21,6 +23,9 @@ TOKEN* tokenize(LEXER* lexer, TOKEN_TYPE type);
 TOKEN* tokenize_number(LEXER* lexer);
 TOKEN* tokenize_identifier(LEXER* lexer);
 TOKEN* tokenize_string(LEXER* lexer);
-TOKEN* tokenize_string(LEXER* lexer);
+
+//Helper Methods
+char* wrap_char_to_str(const char* c);
+bool instance_of(const char* word, const char** list);
 
 #endif

@@ -1,12 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-const static char* KEYWORDS[14] = {
-  "string",
-  "int",
-  "real",
-  "boolean",
-  "byte",
+const static char* KEYWORDS[9] = {
   "if",
   "while",
   "for",
@@ -18,9 +13,18 @@ const static char* KEYWORDS[14] = {
   "false"
 };
 
+const static char* TYPES[5] = {
+  "string",
+  "int",
+  "real",
+  "boolean",
+  "byte"
+};
+
 typedef enum token_type {
   //Identifiers
   TOKEN_KEYWORD,
+  TOKEN_VARIABLE_TYPE,
   TOKEN_IDENTIFIER,
 
   //Type literals
