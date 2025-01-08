@@ -25,7 +25,7 @@ TOKEN* tokenize_identifier(LEXER* lexer);
 TOKEN* tokenize_string(LEXER* lexer);
 
 //Helper Methods
-char* wrap_char_to_str(const char* c);
+char* wrap_char_to_str(char c);
 bool instance_of(const char* word, const char** list);
 
 #endif
