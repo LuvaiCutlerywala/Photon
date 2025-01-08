@@ -9,9 +9,7 @@ int main(int argc, char** argv) {
     char* contents = read_file("../examples/main.pht");
     LEXER* lexer = init_lexer(contents);
     PARSER* parser = init_parser(lexer);
-    AST_NODE* root = parse(parser);
+    const AST_NODE* root = parse(parser);
 
-    printf("%d\n", root->type);
-    printf("%lu\n", root->compound_size);
     return 0;
 }

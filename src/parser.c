@@ -57,6 +57,13 @@ AST_NODE* parse_statements(PARSER* parser){
 }
 
 AST_NODE* parse_expression(PARSER* parser){
+  switch (parser->current_token->type) {
+    case TOKEN_STRING_LITERAL:
+      return parse_string(parser);
+    default:
+      debug("parser.parse_expression", "Cannot parse token yet.");
+  }
+
   return NULL;
 }
 
@@ -73,6 +80,8 @@ AST_NODE* parse_function_call(PARSER* parser){
 }
 
 AST_NODE* parse_variable_definition(PARSER* parser) {
+  debug("parser.parse_variable_definition", "Creating variable definition node.");
+  char* variable_type = parser->current_token->value;
   consume_token(parser, TOKEN_VARIABLE_TYPE);
   char* variable_name = parser->current_token->value;
   consume_token(parser, TOKEN_IDENTIFIER);
@@ -81,11 +90,15 @@ AST_NODE* parse_variable_definition(PARSER* parser) {
   AST_NODE* variable_definition = init_ast_node(AST_VARIABLE_DEFINITION);
   variable_definition->variable_defined_name = variable_name;
   variable_definition->variable_definition = variable_value;
+  variable_definition->variable_type = variable_type;
   return variable_definition;
 }
 
 AST_NODE* parse_string(PARSER* parser){
-  return NULL;
+  AST_NODE* string = init_ast_node(AST_STRING);
+  string->string = parser->current_token->value;
+  consume_token(parser, TOKEN_STRING_LITERAL);
+  return string;
 }
 
 AST_NODE* parse_keyword(PARSER* parser) {
@@ -101,6 +114,5 @@ AST_NODE* parse_identifier(PARSER* parser) {
 
   AST_NODE* variable = init_ast_node(AST_VARIABLE);
   variable->variable_name = token_value;
-
   return variable;
 }
