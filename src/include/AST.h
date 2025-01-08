@@ -11,7 +11,7 @@ typedef enum ast_type {
   AST_COMPOUND
 } AST_TYPE;
 
-typedef struct ast_node {
+typedef struct AST_NODE {
   AST_TYPE type;
 
   //AST_VARIABLE_DEFINITION

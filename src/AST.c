@@ -11,6 +11,8 @@ AST_NODE* init_ast_node(AST_TYPE type) {
   node->function_call_args = NULL;
   node->args_size = 0;
   node->string = NULL;
+  node->compound = NULL;
+  node->compound_size = 0;
 
   return node;
 }
