@@ -16,6 +16,7 @@ typedef struct AST_NODE {
 
   //AST_VARIABLE_DEFINITION
   char* variable_defined_name;
+  char* variable_type;
   struct AST_NODE* variable_definition;
 
   //AST_VARIABLE

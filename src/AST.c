@@ -4,6 +4,7 @@ AST_NODE* init_ast_node(AST_TYPE type) {
   AST_NODE* node = calloc(1, sizeof(AST_NODE));
   node->type = type;
   node->variable_defined_name = NULL;
+  node->variable_type = NULL;
   node->variable_definition = NULL;
   node->variable_name = NULL;
   node->function_call_name = NULL;
