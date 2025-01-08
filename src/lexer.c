@@ -102,6 +102,8 @@ TOKEN* next_token(LEXER* lexer) {
         return tokenize(lexer, TOKEN_LEFT_BRACE);
       case '}':
         return tokenize(lexer, TOKEN_RIGHT_BRACE);
+      case ',':
+        return tokenize(lexer, TOKEN_COMMA);
       default:
         error("lexer.next_token", "Invalid character");
     }
