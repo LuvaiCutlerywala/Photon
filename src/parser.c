@@ -7,12 +7,14 @@ PARSER* init_parser(LEXER* lexer) {
   PARSER* parser = calloc(1, sizeof(PARSER));
   parser->lexer = lexer;
   parser->current_token = next_token(lexer);
+  parser->prev_token = NULL;
 
   return parser;
 }
 
 void consume_token(PARSER* parser, const TOKEN_TYPE token_type) {
   if(parser->current_token->type == token_type) {
+    parser->prev_token = parser->current_token;
     parser->current_token = next_token(parser->lexer);
   } else {
     error("parser.consume_token", "Unexpected token.");
@@ -24,7 +26,9 @@ AST_NODE* parse(PARSER* parser){
   return parse_statements(parser);
 }
 
+
 AST_NODE* parse_statement(PARSER* parser){
+  //TODO: Complete method to parse statements.
   switch (parser->current_token->type) {
     case TOKEN_IDENTIFIER:
       return parse_identifier(parser);
@@ -57,6 +61,7 @@ AST_NODE* parse_statements(PARSER* parser){
 }
 
 AST_NODE* parse_expression(PARSER* parser){
+  //TODO: Complete method to parse expression.
   switch (parser->current_token->type) {
     case TOKEN_STRING_LITERAL:
       return parse_string(parser);
@@ -68,15 +73,29 @@ AST_NODE* parse_expression(PARSER* parser){
 }
 
 AST_NODE* parse_factor(PARSER* parser){
+  //TODO: Write a method to parse factors.
   return NULL;
 }
 
 AST_NODE* parse_term(PARSER* parser){
+  //TODO: Write a method to parse terms.
   return NULL;
 }
 
 AST_NODE* parse_function_call(PARSER* parser){
-  return NULL;
+  AST_NODE* function_call = init_ast_node(AST_FUNCTION_CALL);
+  function_call->function_call_name = parser->prev_token->value;
+  function_call->function_call_args = calloc(1, sizeof(AST_NODE*));
+  AST_NODE* expr = parse_expression(parser);
+  function_call->function_call_args[0] = expr;
+  while (parser->current_token->type == TOKEN_COMMA) {
+    consume_token(parser, TOKEN_COMMA);
+    expr = parse_expression(parser);
+    function_call->args_size++;
+    function_call->function_call_args = realloc(function_call->function_call_args, function_call->args_size * sizeof(AST_NODE*));
+    function_call->function_call_args[function_call->args_size - 1] = expr;
+  }
+  return function_call;
 }
 
 AST_NODE* parse_variable_definition(PARSER* parser) {
@@ -102,6 +121,7 @@ AST_NODE* parse_string(PARSER* parser){
 }
 
 AST_NODE* parse_keyword(PARSER* parser) {
+  //TODO: Write method to parse keywords.
   return NULL;
 }
 
