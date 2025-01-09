@@ -3,6 +3,11 @@
 
 #include <stdlib.h>
 
+/*
+ * Types for the different AST nodes. Currently, the types are only inclusive of variable references, variable
+ * definitions, function calls, strings, and compound statements. As there are more keywords and other features, some of
+ * the types of AST nodes will be added will include control flow statements, etc.
+ */
 typedef enum ast_type {
   AST_VARIABLE_DEFINITION,
   AST_VARIABLE,
@@ -11,6 +16,12 @@ typedef enum ast_type {
   AST_COMPOUND
 } AST_TYPE;
 
+/*
+ * A struct that represents the AST node. The different values are currently all part of the same node, for simplicity,
+ * however it would be better practice to have different node types for different nodes. As C does not have a concept of
+ * inheritance, due to it being a purely imperative language, this one monolithic AST node is used, along with the enum
+ * above, to identify different types of AST nodes.
+ */
 typedef struct AST_NODE {
   AST_TYPE type;
 
@@ -35,6 +46,8 @@ typedef struct AST_NODE {
   size_t compound_size;
 } AST_NODE;
 
+/// @brief Initialises the AST node.
+/// @param type The type of AST node to be initialised.
 AST_NODE* init_ast_node(AST_TYPE type);
 
 #endif
