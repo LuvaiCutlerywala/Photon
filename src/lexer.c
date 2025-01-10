@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdio.h>
 
 //Helper Methods
 
@@ -54,6 +55,7 @@ void strip_comments(LEXER* lexer) {
   while (lexer->current_char != '\n' && lexer->current_char != '\0') {
     advance(lexer);
   }
+  advance(lexer);
 }
 
 // Tokenization method
