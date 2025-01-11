@@ -6,52 +6,47 @@
 
 char* get_timestamp() {
   const time_t current_time = time(NULL);
-  const char* ctime_timestamp = ctime(&current_time);
-  char* timestamp = malloc(sizeof(char)* (strlen(ctime_timestamp) - 2));
-  memcpy(timestamp, ctime_timestamp, strlen(ctime_timestamp));
+  char* timestamp = ctime(&current_time);
+  timestamp[strlen(timestamp) - 1] = '\0';
   return timestamp;
 }
 
-void print(FILE* stream, char* mode, char* message, char* source) {
-  char* timestamp = get_timestamp();
-  fprintf(stream, "[%s] [%s] AT [%s]: %s\n", mode, timestamp, source, message);
-  free(timestamp);
+void print_str(FILE* stream, char* mode, char* message, char* source) {
+  fprintf(stream, "[%s] [%s] AT [%s]: %s\n", mode, get_timestamp(), source, message);
 }
 
-void print(FILE* stream, char* mode, int value, char* source) {
-  char* timestamp = get_timestamp();
-  fprintf(stream, "[%s] [%s] AT [%s]: %d\n", mode, timestamp, source, value);
-  free(timestamp);
+void print_int(FILE* stream, char* mode, int value, char* source) {
+  fprintf(stream, "[%s] [%s] AT [%s]: %d\n", mode, get_timestamp(), source, value);
 }
 
 void info(char* source, char* message){
-  print(stdout, "INFO", message, source);
+  print_str(stdout, "INFO", message, source);
 }
 
-void info(char* source, int value) {
-  print(stdout, "INFO", value, source);
+void info_int(char* source, int value) {
+  print_int(stdout, "INFO", value, source);
 }
 
 void error(char* source, char* message){
-  print(stderr, "ERROR", message, source);
+  print_str(stderr, "ERROR", message, source);
 }
 
-void error(char* source, int value) {
-  print(stderr, "ERROR", value, source);
+void error_int(char* source, int value) {
+  print_int(stderr, "ERROR", value, source);
 }
 
 void warn(char* source, char* message){
-  print(stderr, "WARN", message, source);
+  print_str(stderr, "WARN", message, source);
 }
 
-void warn(char* source, int value) {
-  print(stderr, "WARN", value, source);
+void warn_int(char* source, int value) {
+  print_int(stderr, "WARN", value, source);
 }
 
 void debug(char* source, char* message){
-  print(stdout, "DEBUG", message, source);
+  print_str(stdout, "DEBUG", message, source);
 }
 
-void debug(char* source, int value) {
-  print(stdout, "DEBUG", value, source);
+void debug_int(char* source, int value) {
+  print_int(stdout, "DEBUG", value, source);
 }
