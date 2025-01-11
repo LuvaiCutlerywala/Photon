@@ -5,7 +5,7 @@
 
 /*
  * Types for the different AST nodes. Currently, the types are only inclusive of variable references, variable
- * definitions, function calls, strings, and compound statements. As there are more keywords and other features, some of
+ * definitions, function calls, strings, compound statements, and halt. As there are more keywords and other features, some of
  * the types of AST nodes will be added will include control flow statements, etc.
  */
 typedef enum ast_type {
@@ -13,7 +13,8 @@ typedef enum ast_type {
   AST_VARIABLE,
   AST_FUNCTION_CALL,
   AST_STRING,
-  AST_COMPOUND
+  AST_COMPOUND,
+  AST_HALT
 } AST_TYPE;
 
 /*
