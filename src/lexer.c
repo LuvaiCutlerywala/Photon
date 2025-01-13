@@ -17,7 +17,7 @@ char* wrap_char_to_str(const char c){
 }
 
 bool instance_of(const char* word, const char** list) {
-  for (int i = 0; i < size(list); i++) {
+  for (unsigned long i = 0; i < SIZE(list); i++) {
     if (strcmp(word, list[i]) == 0) {
       return true;
     }

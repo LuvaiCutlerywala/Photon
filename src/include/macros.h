@@ -4,6 +4,6 @@
 /*
  * Gets the size of the array.
  */
-#define size(arr) (sizeof(arr) / sizeof(arr[0]))
+#define SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
 #endif
