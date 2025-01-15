@@ -1,3 +1,5 @@
+// A simple program which prints the name 'john doe' to the standard output.s
+
 string name = "john doe";
-//This is a comment.
+
 print(name)
