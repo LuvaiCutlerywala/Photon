@@ -8,6 +8,7 @@ int main(int argc, char** argv) {
     LEXER* lexer = init_lexer(contents);
     PARSER* parser = init_parser(lexer);
     AST_NODE* root = parse(parser);
-    visit(root);
+    VISITOR* visitor = init_visitor();
+    visit(visitor, root);
     return 0;
 }
