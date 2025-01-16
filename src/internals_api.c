@@ -18,3 +18,27 @@ AST_NODE* internal_api_func_print(VISITOR* visitor, AST_NODE** function_call_arg
 
     return init_ast_node(AST_HALT);
 }
+
+AST_NODE* internal_api_op_add(VISITOR* visitor, AST_NODE** arithmetic_args) {
+    long a, b;
+    AST_NODE* operand = visit(visitor, arithmetic_args[0]);
+    if (operand->type == AST_INTEGER) {
+
+    } else if (operand->type == AST_REAL) {
+
+    } else {
+
+    }
+}
+
+AST_NODE* internal_api_op_subtract(VISITOR* visitor, AST_NODE** arithmetic_args) {
+
+}
+
+AST_NODE* internal_api_op_multiply(VISITOR* visitor, AST_NODE** arithmetic_args) {
+
+}
+
+AST_NODE* internal_api_op_divide(VISITOR* visitor, AST_NODE** arithmetic_args) {
+
+}
