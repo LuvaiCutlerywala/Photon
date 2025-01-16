@@ -13,6 +13,8 @@ typedef enum ast_type {
   AST_VARIABLE,
   AST_FUNCTION_CALL,
   AST_STRING,
+  AST_INTEGER,
+  AST_REAL,
   AST_COMPOUND,
   AST_HALT
 } AST_TYPE;
