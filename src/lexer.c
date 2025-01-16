@@ -8,13 +8,6 @@
 
 //Helper Methods
 
-char* wrap_char_to_str(const char c){
-  char* string = calloc(2, sizeof(char));
-  string[0] = c;
-  string[1] = '\0';
-  return string;
-}
-
 bool instance_of(const char* word, const char** list) {
   for (unsigned long i = 0; i < SIZE(list); i++) {
     if (strcmp(word, list[i]) == 0) {
@@ -114,7 +107,7 @@ TOKEN* next_token(LEXER* lexer) {
 }
 
 TOKEN* tokenize(LEXER* lexer, const TOKEN_TYPE type) {
-  TOKEN* token = init_token(type, wrap_char_to_str(lexer->current_char));
+  TOKEN* token = init_token(type, wrap_as_str(lexer->current_char));
   advance(lexer);
   return token;
 }
@@ -127,7 +120,7 @@ TOKEN* tokenize_number(LEXER* lexer) {
     if (lexer->current_char == '.' && !is_real) {
       is_real = true;
     }
-    char* new_str = wrap_char_to_str(lexer->current_char);
+    char* new_str = wrap_as_str(lexer->current_char);
     number = realloc(number, (strlen(number) + strlen(new_str) + 1) * sizeof(char));
     strcat(number, new_str);
     free(new_str);
@@ -148,7 +141,7 @@ TOKEN* tokenize_identifier(LEXER* lexer) {
   char* id = calloc(1, sizeof(char));
   id[0] = '\0';
   while (isalnum(lexer->current_char)) {
-    char* new_str = wrap_char_to_str(lexer->current_char);
+    char* new_str = wrap_as_str(lexer->current_char);
     id = realloc(id, (strlen(id) + strlen(new_str) + 1) * sizeof(char));
     strcat(id, new_str);
     free(new_str);
@@ -175,7 +168,7 @@ TOKEN* tokenize_string(LEXER* lexer) {
   char* string = calloc(1, sizeof(char));
   string[0] = '\0';
   while (lexer->current_char != '"') {
-    char* new_str = wrap_char_to_str(lexer->current_char);
+    char* new_str = wrap_as_str(lexer->current_char);
     string = realloc(string, (strlen(string) + strlen(new_str) + 1) * sizeof(char));
     strcat(string, new_str);
     free(new_str);

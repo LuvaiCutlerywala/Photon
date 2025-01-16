@@ -58,10 +58,6 @@ TOKEN* tokenize_string(LEXER* lexer);
 
 //Helper Methods
 
-/// @brief Wraps a single character into a string.
-/// @param c The character to be wrapped.
-char* wrap_char_to_str(char c);
-
 /// @brief Checks if a given word is present in the list. Used for checking for keywords or primitive types.
 /// @param word The word to be checked.
 /// @param list The collection of possible instance types.
