@@ -29,7 +29,6 @@ AST_NODE* parse(PARSER* parser){
 
 AST_NODE* parse_statement(PARSER* parser){
   //TODO: Complete method to parse statements.
-  debug("parser.parse_statement", "Parsing an individual statement.");
   switch (parser->current_token->type) {
     case TOKEN_IDENTIFIER:
       return parse_identifier(parser);
@@ -38,14 +37,13 @@ AST_NODE* parse_statement(PARSER* parser){
     case TOKEN_KEYWORD:
         return parse_keyword(parser);
     default:
-      debug("parser.parse_statement", "Cannot parse token yet.");
+      error("parser.parse_statement", "Cannot parse token yet.");
   }
 
   return NULL;
 }
 
 AST_NODE* parse_statements(PARSER* parser){
-  debug("parser.parse_statements", "Parsing statements.");
   AST_NODE* compound = init_ast_node(AST_COMPOUND);
   compound->compound = calloc(1, sizeof(AST_NODE*));
   AST_NODE* statement = parse_statement(parser);
@@ -55,9 +53,9 @@ AST_NODE* parse_statements(PARSER* parser){
   while(parser->current_token->type == TOKEN_SEMICOLON) {
     consume_token(parser, TOKEN_SEMICOLON);
     statement = parse_statement(parser);
+    compound->compound_size++;
     compound->compound = realloc(compound->compound, compound->compound_size * sizeof(AST_NODE*));
     compound->compound[compound->compound_size - 1] = statement;
-    compound->compound_size++;
   }
 
   return compound;
@@ -65,14 +63,13 @@ AST_NODE* parse_statements(PARSER* parser){
 
 AST_NODE* parse_expression(PARSER* parser){
   //TODO: Complete method to parse expression.
-  debug("parser.parse_expression", "Parsing an expression.");
   switch (parser->current_token->type) {
     case TOKEN_STRING_LITERAL:
       return parse_string(parser);
     case TOKEN_IDENTIFIER:
       return parse_identifier(parser);
     default:
-      debug("parser.parse_expression", "Cannot parse token yet.");
+      error("parser.parse_expression", "Cannot parse token yet.");
   }
 
   return NULL;
@@ -89,13 +86,16 @@ AST_NODE* parse_term(PARSER* parser){
 }
 
 AST_NODE* parse_function_call(PARSER* parser){
-  debug("parser.parse_function_call", "Parsing a function call.");
   AST_NODE* function_call = init_ast_node(AST_FUNCTION_CALL);
   function_call->function_call_name = parser->prev_token->value;
   function_call->function_call_args = calloc(1, sizeof(AST_NODE*));
+  function_call->args_size++;
+
   consume_token(parser, TOKEN_LEFT_PARENTHESIS);
+
   AST_NODE* expr = parse_expression(parser);
   function_call->function_call_args[0] = expr;
+
   while (parser->current_token->type == TOKEN_COMMA) {
     consume_token(parser, TOKEN_COMMA);
     expr = parse_expression(parser);
@@ -107,7 +107,6 @@ AST_NODE* parse_function_call(PARSER* parser){
 }
 
 AST_NODE* parse_variable_definition(PARSER* parser) {
-  debug("parser.parse_variable_definition", "Parsing a variable definition.");
   char* variable_type = parser->current_token->value;
   consume_token(parser, TOKEN_VARIABLE_TYPE);
   char* variable_name = parser->current_token->value;
@@ -122,7 +121,6 @@ AST_NODE* parse_variable_definition(PARSER* parser) {
 }
 
 AST_NODE* parse_string(PARSER* parser){
-  debug("parser.parse_string", "Parsing a string.");
   AST_NODE* string = init_ast_node(AST_STRING);
   string->string = parser->current_token->value;
   consume_token(parser, TOKEN_STRING_LITERAL);
@@ -135,7 +133,6 @@ AST_NODE* parse_keyword(PARSER* parser) {
 }
 
 AST_NODE* parse_identifier(PARSER* parser) {
-  debug("parser.parse_identifier", "Parsing a identifier.");
   char* token_value = parser->current_token->value;
   consume_token(parser, TOKEN_IDENTIFIER);
   if (parser->current_token->type == TOKEN_LEFT_PARENTHESIS) {

@@ -1,5 +1,3 @@
-// A simple program which prints the name 'john doe' to the standard output.s
+string name = "Hello World";
 
-string name = "john doe";
-
-print(name)
+print(name);
