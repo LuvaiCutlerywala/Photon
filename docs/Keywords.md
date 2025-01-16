@@ -20,3 +20,14 @@
 | return   | Returns a value from the function, omitting all further instructions. |
 | true     | The maximal state of a boolean variable.                              |
 | false    | The minimal state of a boolean variable.                              |
+
+## Operations
+| Operator | Operation                                                   |
+|----------|-------------------------------------------------------------|
+| ;        | Denotes the end of an instruction.                          |
+| ,        | Denotes the delimiter for passing arguments into functions. |
+| =        | Denotes assignment to a variable.                           |
+| +        | Denotes addition of numbers.                                |
+| -        | Denotes subtraction of numbers.                             |
+| *        | Denotes multiplication of numbers.                          | 
+| /        | Denotes the division of numbers.                            | 

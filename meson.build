@@ -4,6 +4,11 @@ project('photon', 'c',
 
 #Compile and install logging library that is included in the compiler.
 logger = shared_library('photon_logger', ['logging/logger.c', 'logging/logger.h'])
+internals = shared_library('photon_internal', ['internal/internal_functions.h',
+                                               'internal/internal_functions.c',
+                                               'internal/internal_operations.h',
+                                               'internal/internal_operations.c'
+                           ])
 
 #Compile and install the actual compiler.
 include = include_directories('src/include')
@@ -16,7 +21,7 @@ photon = executable(
         source,
         install : true,
         include_directories : include,
-        link_with : logger
+        link_with : [logger, internals]
 )
 
 test('test', photon)
